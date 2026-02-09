@@ -22,6 +22,11 @@ import {
   Input,
   iconButtonClasses,
   Link,
+  List,
+  ListDivider,
+  ListItem,
+  ListItemContent,
+  ListItemDecorator,
   Menu,
   MenuButton,
   MenuItem,
@@ -390,6 +395,92 @@ export function Component() {
             Next
           </Button>
         </Box>
+
+        <Box sx={{ display: { xs: 'block', sm: 'none' } }}>
+          {rows.map((listItem) => (
+            <List key={listItem.id} size="sm" sx={{ '--ListItem-paddingX': 0 }}>
+              <ListItem
+                sx={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'start',
+                }}
+              >
+                <ListItemContent
+                  sx={{ display: 'flex', gap: 2, alignItems: 'start' }}
+                >
+                  <ListItemDecorator>
+                    <Avatar size="sm">{listItem.customer.initial}</Avatar>
+                  </ListItemDecorator>
+                  <div>
+                    <Typography gutterBottom sx={{ fontWeight: 600 }}>
+                      {listItem.customer.name}
+                    </Typography>
+                    <Typography level="body-xs" gutterBottom>
+                      {listItem.customer.email}
+                    </Typography>
+                    <Box
+                      sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        gap: 0.5,
+                        mb: 1,
+                      }}
+                    >
+                      <Typography level="body-xs">{listItem.date}</Typography>
+                      <Typography level="body-xs">&bull;</Typography>
+                      <Typography level="body-xs">{listItem.id}</Typography>
+                    </Box>
+                    <Box
+                      sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: 1,
+                        mb: 1,
+                      }}
+                    >
+                      <Link level="body-sm" component="button">
+                        Download
+                      </Link>
+                      <OrderMenu />
+                    </Box>
+                  </div>
+                </ListItemContent>
+                <OrderStatus status={listItem.status} />
+              </ListItem>
+              <ListDivider />
+            </List>
+          ))}
+          <Box
+            className="Pagination-mobile"
+            sx={{
+              display: { xs: 'flex', md: 'none' },
+              alignItems: 'center',
+              py: 2,
+            }}
+          >
+            <IconButton
+              aria-label="previous page"
+              variant="outlined"
+              color="neutral"
+              size="sm"
+            >
+              <ChevronLeftIcon />
+            </IconButton>
+            <Typography level="body-sm" sx={{ mx: 'auto' }}>
+              Page 1 of 10
+            </Typography>
+            <IconButton
+              aria-label="next page"
+              variant="outlined"
+              color="neutral"
+              size="sm"
+            >
+              <ChevronRightIcon />
+            </IconButton>
+          </Box>
+        </Box>
       </Page>
     </Breadcrumbs.Provider>
   );
@@ -410,28 +501,7 @@ const columns: Column<Order>[] = [
   {
     header: 'Status',
     width: 140,
-    Cell: ({ row }) => (
-      <Chip
-        variant="soft"
-        size="sm"
-        startDecorator={
-          {
-            Paid: <CheckIcon />,
-            Refunded: <ArrowPathIcon />,
-            Cancelled: <NoSymbolIcon />,
-          }[row.status]
-        }
-        color={
-          {
-            Paid: 'success',
-            Refunded: 'neutral',
-            Cancelled: 'danger',
-          }[row.status] as ColorPaletteProp
-        }
-      >
-        {row.status}
-      </Chip>
-    ),
+    Cell: ({ row }) => <OrderStatus status={row.status} />,
   },
   {
     header: 'Customer',
@@ -476,5 +546,30 @@ function OrderMenu() {
         <MenuItem color="danger">Delete</MenuItem>
       </Menu>
     </Dropdown>
+  );
+}
+
+function OrderStatus({ status }: Pick<Order, 'status'>) {
+  return (
+    <Chip
+      variant="soft"
+      size="sm"
+      startDecorator={
+        {
+          Paid: <CheckIcon />,
+          Refunded: <ArrowPathIcon />,
+          Cancelled: <NoSymbolIcon />,
+        }[status]
+      }
+      color={
+        {
+          Paid: 'success',
+          Refunded: 'neutral',
+          Cancelled: 'danger',
+        }[status] as ColorPaletteProp
+      }
+    >
+      {status}
+    </Chip>
   );
 }
