@@ -19,7 +19,7 @@ const BreadcrumbsContext = createContext<Breadcrumb[]>([]);
 export default function Breadcrumbs() {
   const breadcrumbs = useContext(BreadcrumbsContext);
 
-  if (breadcrumbs.length === 0) return null
+  if (breadcrumbs.length === 0) return null;
 
   return (
     <JoyBreadcrumbs

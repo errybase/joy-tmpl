@@ -13,7 +13,12 @@ export default createBrowserRouter([
       },
       {
         Component: Root,
-        children: [],
+        children: [
+          {
+            path: 'orders',
+            lazy: () => import('@/routes/Orders'),
+          },
+        ],
       },
     ],
   },
