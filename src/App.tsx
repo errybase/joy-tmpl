@@ -1,11 +1,13 @@
-import { CssVarsProvider, CssBaseline } from '@mui/joy'
+import { RouterProvider } from 'react-router';
+import Theme from '@/components/Theme';
+import router from '@/router';
 
 const App = () => {
   return (
-    <CssVarsProvider>
-      <CssBaseline />
-    </CssVarsProvider>
-  )
+    <Theme>
+      <RouterProvider router={router} />
+    </Theme>
+  );
 };
 
 export default App;
