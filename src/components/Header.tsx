@@ -1,8 +1,8 @@
-import GlobalStyles from '@mui/joy/GlobalStyles';
-import Sheet from '@mui/joy/Sheet';
-import IconButton from '@mui/joy/IconButton';
-import { toggleSidebar } from './Sidebar';
 import { Bars3Icon } from '@heroicons/react/24/outline';
+import GlobalStyles from '@mui/joy/GlobalStyles';
+import IconButton from '@mui/joy/IconButton';
+import Sheet from '@mui/joy/Sheet';
+import { toggleSidebar } from './Sidebar';
 
 export default function Header() {
   return (
