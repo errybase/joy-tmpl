@@ -22,4 +22,8 @@ export default createBrowserRouter([
       },
     ],
   },
+  {
+    path: '/sign-in',
+    lazy: () => import('@/routes/SignIn')
+  }
 ]);

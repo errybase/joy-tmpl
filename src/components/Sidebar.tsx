@@ -298,7 +298,7 @@ export default function Sidebar() {
           <Typography level="title-sm">Siriwat K.</Typography>
           <Typography level="body-xs">siriwatk@test.com</Typography>
         </Box>
-        <IconButton size="sm" variant="plain" color="neutral">
+        <IconButton size="sm" variant="plain" color="neutral" component={Link} to='sign-in'>
           <ArrowRightStartOnRectangleIcon />
         </IconButton>
       </Box>
