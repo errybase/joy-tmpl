@@ -3,14 +3,12 @@ import {
   ArrowRightStartOnRectangleIcon,
   ChatBubbleLeftRightIcon,
   ChevronDownIcon,
-  ClipboardDocumentCheckIcon,
   GlobeAsiaAustraliaIcon,
   HomeIcon,
   MagnifyingGlassIcon,
   QuestionMarkCircleIcon,
-  RectangleGroupIcon,
   ShoppingCartIcon,
-  UserIcon,
+  UsersIcon,
   XMarkIcon,
 } from '@heroicons/react/24/outline';
 import {
@@ -34,7 +32,9 @@ import {
   Typography,
 } from '@mui/joy';
 import React, { useState } from 'react';
+import { Link } from 'react-router';
 import ColorSchemeToggle from './ColorSchemeToggle';
+import MatchPath from './MatchPath';
 
 function openSidebar() {
   if (typeof window !== 'undefined') {
@@ -183,113 +183,56 @@ export default function Sidebar() {
             '--ListItem-radius': (theme) => theme.vars.radius.sm,
           }}
         >
-          <ListItem>
-            <ListItemButton>
-              <HomeIcon />
-              <ListItemContent>
-                <Typography level="title-sm">Home</Typography>
-              </ListItemContent>
-            </ListItemButton>
-          </ListItem>
+          {items.map(({ icon, label, decorator, path, children }, idx) => {
+            const nested = !!children?.length;
 
-          <ListItem>
-            <ListItemButton>
-              <RectangleGroupIcon />
-              <ListItemContent>
-                <Typography level="title-sm">Dashboard</Typography>
-              </ListItemContent>
-            </ListItemButton>
-          </ListItem>
-
-          <ListItem>
-            <ListItemButton selected>
-              <ShoppingCartIcon />
-              <ListItemContent>
-                <Typography level="title-sm">Orders</Typography>
-              </ListItemContent>
-            </ListItemButton>
-          </ListItem>
-
-          <ListItem nested>
-            <Toggler
-              renderToggle={({ open, setOpen }) => (
-                <ListItemButton onClick={() => setOpen(!open)}>
-                  <ClipboardDocumentCheckIcon />
-                  <ListItemContent>
-                    <Typography level="title-sm">Tasks</Typography>
-                  </ListItemContent>
-                  <Box
-                    component={ChevronDownIcon}
-                    sx={{ transform: open ? 'rotate(180deg)' : 'none' }}
-                  />
-                </ListItemButton>
-              )}
-            >
-              <List sx={{ gap: 0.5 }}>
-                <ListItem sx={{ mt: 0.5 }}>
-                  <ListItemButton>All tasks</ListItemButton>
-                </ListItem>
-                <ListItem>
-                  <ListItemButton>Backlog</ListItemButton>
-                </ListItem>
-                <ListItem>
-                  <ListItemButton>In progress</ListItemButton>
-                </ListItem>
-                <ListItem>
-                  <ListItemButton>Done</ListItemButton>
-                </ListItem>
-              </List>
-            </Toggler>
-          </ListItem>
-          <ListItem>
-            <ListItemButton
-              role="menuitem"
-              component="a"
-              href="/joy-ui/getting-started/templates/messages/"
-            >
-              <ChatBubbleLeftRightIcon />
-              <ListItemContent>
-                <Typography level="title-sm">Messages</Typography>
-              </ListItemContent>
-              <Chip size="sm" color="primary" variant="solid">
-                4
-              </Chip>
-            </ListItemButton>
-          </ListItem>
-          <ListItem nested>
-            <Toggler
-              renderToggle={({ open, setOpen }) => (
-                <ListItemButton onClick={() => setOpen(!open)}>
-                  <UserIcon />
-                  <ListItemContent>
-                    <Typography level="title-sm">Users</Typography>
-                  </ListItemContent>
-                  <Box
-                    component={ChevronDownIcon}
-                    sx={{ transform: open ? 'rotate(180deg)' : 'none' }}
-                  />
-                </ListItemButton>
-              )}
-            >
-              <List sx={{ gap: 0.5 }}>
-                <ListItem sx={{ mt: 0.5 }}>
-                  <ListItemButton
-                    role="menuitem"
-                    component="a"
-                    href="/joy-ui/getting-started/templates/profile-dashboard/"
+            return (
+              <ListItem key={idx.toString()} nested={nested}>
+                {nested ? (
+                  <Toggler
+                    renderToggle={({ open, setOpen }) => (
+                      <ListItemButton onClick={() => setOpen(!open)}>
+                        {icon}
+                        <ListItemContent>
+                          <Typography level="title-sm">{label}</Typography>
+                        </ListItemContent>
+                        <Box
+                          component={ChevronDownIcon}
+                          sx={{ transform: open ? 'rotate(180deg)' : 'none' }}
+                        />
+                      </ListItemButton>
+                    )}
                   >
-                    My profile
-                  </ListItemButton>
-                </ListItem>
-                <ListItem>
-                  <ListItemButton>Create a new user</ListItemButton>
-                </ListItem>
-                <ListItem>
-                  <ListItemButton>Roles & permission</ListItemButton>
-                </ListItem>
-              </List>
-            </Toggler>
-          </ListItem>
+                    <List sx={{ gap: 0.5, mt: 0.5 }}>
+                      {children.map(({ path, label }) => (
+                        <ListItem key={path}>
+                          <MatchPath path={path}>
+                            {active => (
+                              <ListItemButton component={Link} to={path} selected={active}>
+                                {label}
+                              </ListItemButton>
+                            )}
+                          </MatchPath>
+                        </ListItem>
+                      ))}
+                    </List>
+                  </Toggler>
+                ) : typeof path === 'string' && (
+                  <MatchPath path={path}>
+                    {active => (
+                      <ListItemButton selected={active} component={Link} to={path}>
+                        {icon}
+                        <ListItemContent>
+                          <Typography level="title-sm">{label}</Typography>
+                        </ListItemContent>
+                        {decorator}
+                      </ListItemButton>
+                    )}
+                  </MatchPath>
+                )}
+              </ListItem>
+            );
+          })}
         </List>
         <List
           size="sm"
@@ -362,3 +305,39 @@ export default function Sidebar() {
     </Sheet>
   );
 }
+const items = [
+  {
+    path: '',
+    icon: <HomeIcon />,
+    label: 'Home',
+  },
+  {
+    path: 'orders',
+    icon: <ShoppingCartIcon />,
+    label: 'Orders',
+  },
+  {
+    path: 'messages',
+    icon: <ChatBubbleLeftRightIcon />,
+    label: 'Messages',
+    decorator: (
+      <Chip size="sm" color="primary" variant="solid">
+        4
+      </Chip>
+    ),
+  },
+  {
+    icon: <UsersIcon />,
+    label: 'Users',
+    children: [
+      {
+        path: 'profile',
+        label: 'My profile',
+      },
+      {
+        path: 'users/new',
+        label: 'Create a new user',
+      },
+    ],
+  },
+];

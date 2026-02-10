@@ -1,13 +1,15 @@
-import { DocumentArrowDownIcon } from '@heroicons/react/24/outline';
-import { Box, Button, Typography } from '@mui/joy';
+import { Box, Typography } from '@mui/joy';
+import type React from 'react';
 import Breadcrumbs from './Breadcrumbs';
 
 interface PageProps {
   title: React.ReactNode;
+  actions?: React.ReactNode;
 }
 
 export default function Page({
   title,
+  actions,
   children,
 }: React.PropsWithChildren<PageProps>) {
   return (
@@ -45,13 +47,7 @@ export default function Page({
         <Typography level="h2" component="h1">
           {title}
         </Typography>
-        <Button
-          color="primary"
-          startDecorator={<DocumentArrowDownIcon />}
-          size="sm"
-        >
-          Download PDF
-        </Button>
+        {actions}
       </Box>
       {children}
     </Box>

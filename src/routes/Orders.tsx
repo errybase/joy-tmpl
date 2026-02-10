@@ -3,6 +3,7 @@ import {
   CheckIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
+  DocumentArrowDownIcon,
   EllipsisHorizontalIcon,
   FunnelIcon,
   MagnifyingGlassIcon,
@@ -281,7 +282,18 @@ export function Component() {
   );
   return (
     <Breadcrumbs.Provider element="Orders">
-      <Page title="Orders">
+      <Page
+        title="Orders"
+        actions={
+          <Button
+            color="primary"
+            startDecorator={<DocumentArrowDownIcon />}
+            size="sm"
+          >
+            Download PDF
+          </Button>
+        }
+      >
         <Sheet
           className="SearchAndFilters-mobile"
           sx={{ display: { xs: 'flex', sm: 'none' }, my: 1, gap: 1 }}
